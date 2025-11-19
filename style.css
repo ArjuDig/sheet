@@ -1,3 +1,4 @@
+
 :root {
 	--primary: #7c5cff;
 	--primary-light: #a78bff;
@@ -96,7 +97,7 @@ body {
 	width: 280px;
 	background-color: var(--dark-light);
 	color: var(--text-primary);
-	transition: var(--transition);
+	transition: width 0.4s cubic-bezier(0.2, 0.9, 0.3, 1); /* Smoother width transition */
 	overflow-y: auto;
 	height: 100vh;
 	position: fixed;
@@ -144,10 +145,12 @@ body {
 	background-clip: text;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
+    transition: opacity 0.3s ease;
 }
 
 .sidebar.collapsed .app-name {
 	display: none;
+    opacity: 0;
 }
 
 .sidebar-menu {
@@ -159,35 +162,30 @@ body {
     display: flex;
     align-items: center;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Ultra smooth transition */
     border-left: 4px solid transparent;
     margin: 5px 10px;
     border-radius: 8px;
-    /* pastikan pseudo-elemen ::before berada relatif terhadap item */
     position: relative;
 }
-/* --- GANTI: gaya untuk menu aktif jadi "nav pill" --- */
+
 .menu-item.active {
-    /* pill background (gradient), penuh lebar tetapi ber-radius besar */
     background: linear-gradient(90deg, var(--primary), var(--primary-light));
     color: #fff;
-    border-left-color: transparent; /* hapus accent kiri karena pill sudah menonjol */
+    border-left-color: transparent;
     box-shadow: var(--neon-glow), 0 8px 24px rgba(0,0,0,0.12);
     transform: translateX(6px);
     padding-left: 18px;
     padding-right: 18px;
-    margin: 6px 14px; /* beri ruang agar pill terlihat terangkat dari tepi */
-    border-radius: 999px; /* bentuk pill */
-    transition: var(--transition);
+    margin: 6px 14px;
+    border-radius: 999px;
 }
 
-/* pastikan icon & teks dalam pill berubah warna */
 .menu-item.active i,
 .menu-item.active span {
     color: #fff;
 }
 
-/* hover ringan untuk pill */
 .menu-item.active:hover {
     transform: translateX(8px) scale(1.01);
     box-shadow: 0 12px 36px rgba(124,92,255,0.18);
@@ -212,37 +210,13 @@ body {
     padding-left: 12px;
     padding-right: 12px;
 }
-.menu-item::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: -100%;
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-	transition: 0.5s;
-}
-
-.menu-item:hover::before {
-	left: 100%;
-}
-
-.menu-item:hover {
-	background-color: rgba(255, 255, 255, 0.05);
-	transform: translateX(5px);
-}
-
-.menu-item.active {
-	background-color: rgba(255, 255, 255, 0.1);
-	border-left-color: var(--primary);
-	box-shadow: var(--neon-glow);
-}
 
 .menu-item i {
 	margin-right: 12px;
 	font-size: 18px;
 	width: 24px;
 	text-align: center;
+    transition: color 0.3s ease;
 }
 
 .sidebar.collapsed .menu-item span {
@@ -1135,18 +1109,28 @@ input:checked + .toggle-slider:before {
 }
 
 /* Bagian Konten (Section) */
+/* ANIMASI HALUS UNTUK KONTEN */
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .content-section {
 	display: none;
+    opacity: 0;
+    animation: none;
 }
 
 .content-section.active {
 	display: block;
-	animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-	from { opacity: 0; transform: translateY(10px); }
-	to { opacity: 1; transform: translateY(0); }
+    opacity: 1;
+    animation: fadeInSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Elemen Mengambang (Floating) */
@@ -1372,7 +1356,7 @@ hr.form-separator {
 }
 /* --- AKHIR CSS BARU --- */
 
-/* --- BARU: CSS untuk Media Ajar --- */
+/* --- BARU: CSS untuk Media Ajar (Scene Editor) --- */
 .naskah-preview-area {
 	background-color: var(--dark);
 	border-radius: var(--border-radius);
@@ -1389,53 +1373,132 @@ hr.form-separator {
 }
 .image-output-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-	gap: 20px;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 24px;
 }
+
+/* Editor Card Styles */
 .image-output-item {
 	border-radius: var(--border-radius);
 	overflow: hidden;
 	background-color: var(--dark);
 	box-shadow: var(--shadow);
 	transition: var(--transition);
+	border: 1px solid var(--glass-border);
+	display: flex;
+	flex-direction: column;
 }
 .dark-mode .image-output-item {
 	background-color: var(--dark-light);
 }
 .image-output-item:hover {
 	transform: translateY(-5px);
+	box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
-.image-output-item img {
-	width: 100%;
-	height: 180px; /* Ukuran tetap */
-	object-fit: cover; /* Biar gambar pas */
-	display: block;
-	background-color: #eee; /* Latar belakang saat gambar di-load */
-}
+
 .image-output-item-content {
-	padding: 16px;
+	padding: 20px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }
+
 .image-output-item-content h5 {
+	font-weight: 700;
+	margin-bottom: 4px;
+	font-size: 16px;
+	color: var(--primary);
+}
+
+.input-label-sm {
+	font-size: 12px;
 	font-weight: 600;
-	margin-bottom: 12px;
-}
-/* (BARU) Style untuk audio player */
-.image-output-item-content audio {
-	width: 100%;
-	margin-top: 12px;
-	height: 40px; /* Buat lebih ramping */
-}
-.image-output-item-content p {
-	font-size: 14px;
 	color: var(--text-secondary);
-	max-height: 60px;
+	margin-bottom: 4px;
+	display: block;
+}
+
+.editor-textarea {
+	width: 100%;
+	padding: 10px;
+	border-radius: 8px;
+	border: 1px solid var(--glass-border);
+	background: white;
+	font-size: 14px;
+	min-height: 60px;
+	resize: vertical;
+	margin-bottom: 8px;
+	color: var(--text-primary);
+}
+.dark-mode .editor-textarea {
+	background: rgba(0,0,0,0.2);
+	border-color: rgba(255,255,255,0.1);
+	color: #f0f0f0;
+}
+.editor-textarea:focus {
+	outline: none;
+	border-color: var(--primary);
+	box-shadow: 0 0 0 2px rgba(124,92,255,0.1);
+}
+
+/* Preview Button */
+.btn-preview-audio {
+	background-color: rgba(6, 182, 212, 0.1);
+	color: var(--success);
+	border: 1px solid rgba(6, 182, 212, 0.3);
+	padding: 8px 12px;
+	border-radius: 8px;
+	font-size: 13px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	width: fit-content;
+	transition: all 0.2s;
+}
+.btn-preview-audio:hover {
+	background-color: rgba(6, 182, 212, 0.2);
+	transform: translateY(-1px);
+}
+.btn-preview-audio i { font-size: 12px; }
+
+/* Visual Area in Card */
+.visual-area {
+	margin-top: 12px;
+	background-color: rgba(0,0,0,0.05);
+	border-radius: 8px;
+	height: 160px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
 	overflow: hidden;
 }
-.image-output-item-actions {
-	display: flex;
-	gap: 10px;
-	margin-top: 16px;
+.visual-area img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
+.btn-gen-visual {
+	background: white;
+	color: var(--text-primary);
+	padding: 8px 16px;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 600;
+	border: none;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+	cursor: pointer;
+	z-index: 2;
+	transition: transform 0.2s;
+}
+.btn-gen-visual:hover { transform: scale(1.05); }
+.dark-mode .btn-gen-visual {
+	background: var(--dark);
+	color: white;
+}
+
 /* --- AKHIR CSS BARU --- */
 
 /* --- BARU: CSS UNTUK BANK SOAL --- */
@@ -1739,3 +1802,120 @@ html {
     display: none;
 }
 
+/* --- CSS FOR MODAL --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.open {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--light);
+    margin: auto;
+    padding: 0;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid var(--glass-border);
+}
+
+.dark-mode .modal-content {
+    background-color: var(--dark-light);
+}
+
+.modal.open .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(124,92,255,0.05), rgba(6,182,212,0.05));
+}
+
+.modal-header h2 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin: 0;
+}
+.dark-mode .modal-header h2 { color: #f0f0f0; }
+
+.close-modal {
+    color: var(--text-secondary);
+    font-size: 28px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s;
+    line-height: 1;
+}
+.close-modal:hover {
+    color: #ef4444;
+}
+
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.modal-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 20px;
+}
+
+.modal-tab-btn {
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+}
+.dark-mode .modal-tab-btn { color: var(--gray-light); }
+
+.modal-tab-btn:hover {
+    color: var(--primary);
+    background-color: rgba(124,92,255,0.05);
+}
+
+.modal-tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.modal-tab-content {
+    display: none;
+    animation: fadeInSlide 0.4s ease;
+}
+.modal-tab-content.active {
+    display: block;
+}
