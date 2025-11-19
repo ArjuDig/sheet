@@ -1,9 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- (BARU) KONFIGURASI API ---
-    // Ganti dengan kunci API Anda yang sebenarnya.
-    // PENTING: Untuk produksi, jangan letakkan kunci API langsung di kode frontend.
-    // Gunakan backend proxy untuk keamanan.
-    const GEMINI_API_KEY = "MASUKKAN_KUNCI_API_ANDA_DI_SINI";
+    const GEMINI_API_KEY = "";
     // --- AKHIR KONFIGURASI API ---
 
     const sidebar = document.querySelector('.sidebar');
@@ -1969,3 +1965,4 @@ Parse naskah di atas menjadi array JSON dengan format:
     }
 
 });
+
