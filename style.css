@@ -946,7 +946,7 @@ input:checked + .toggle-slider:before {
 	background-color: var(--dark);
 }
 
-/* Spinner Bar */
+/* Spinner Bar (LEGACY/FALLBACK) */
 .spinner-bar {
 	display: flex;
 	align-items: center;
@@ -966,6 +966,126 @@ input:checked + .toggle-slider:before {
 @keyframes spin {
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
+}
+
+/* --- NEW: ENGAGING AI LOADER --- */
+.ai-loader-container {
+    display: none; /* Default hidden, controlled by JS */
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    width: 100%;
+}
+
+/* When display: flex is applied by JS, these styles take over centering */
+.ai-loader-container[style*="display: flex"],
+.ai-loader-container[style*="display:flex"] {
+    display: flex !important;
+}
+
+.ai-loader-content {
+    text-align: center;
+    width: 100%;
+    max-width: 380px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--neo-shadow-light), var(--neo-shadow-dark);
+    backdrop-filter: blur(12px);
+    animation: fadeInSlide 0.4s ease-out;
+}
+
+.dark-mode .ai-loader-content {
+    background: rgba(30, 30, 30, 0.6);
+}
+
+.ai-loader-icon {
+    font-size: 42px;
+    color: var(--primary);
+    margin-bottom: 16px;
+    display: inline-block;
+    position: relative;
+}
+
+/* Pulsing effect for icon */
+.ai-loader-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: var(--primary);
+    border-radius: 50%;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    opacity: 0.2;
+    animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+    100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+}
+
+.ai-loader-icon i {
+    animation: bounce-gentle 2s infinite ease-in-out;
+}
+
+@keyframes bounce-gentle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+.ai-loader-text h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.ai-loader-text p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.dark-mode .ai-loader-text p {
+    color: var(--gray-light);
+}
+
+.ai-loader-progress-track {
+    height: 6px;
+    width: 100%;
+    background-color: rgba(0,0,0,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.dark-mode .ai-loader-progress-track {
+    background-color: rgba(255,255,255,0.08);
+}
+
+.ai-loader-progress-bar {
+    height: 100%;
+    width: 30%;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: progress-indeterminate 2s infinite ease-in-out;
+}
+
+@keyframes progress-indeterminate {
+    0% { left: -30%; width: 30%; }
+    50% { left: 40%; width: 40%; }
+    100% { left: 100%; width: 20%; }
 }
 
 /* Styling Tabel */
@@ -1930,4 +2050,38 @@ html {
 
 .dark-mode .duration-unit {
     color: var(--gray-light);
+}
+
+/* Pitch Slider Styling */
+.pitch-slider {
+    -webkit-appearance: none; 
+    appearance: none;
+    height: 4px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 2px;
+    outline: none;
+}
+.dark-mode .pitch-slider {
+    background: rgba(255,255,255,0.2);
+}
+.pitch-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.pitch-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+.pitch-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: none;
 }
