@@ -377,6 +377,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    // --- (BARU) Logika Form Analisis Hasil ---
+    const formAnalisisHasil = document.getElementById('form-analisis-hasil');
+    if (formAnalisisHasil) {
+        formAnalisisHasil.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const dataNilai = document.getElementById('analisis-data-nilai').value;
+            const jenisAnalisis = document.getElementById('analisis-jenis-analisis').value;
+            const analisisBtn = document.getElementById('analisis-btn');
+            const hasilOutput = document.getElementById('analisis-hasil-output');
+            const hasilContent = document.getElementById('analisis-hasil-content');
+
+            if (!dataNilai.trim()) {
+                showNotification('Data nilai tidak boleh kosong.', true);
+                return;
+            }
+
+            // Tampilkan loading
+            analisisBtn.disabled = true;
+            analisisBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menganalisis...';
+            hasilOutput.style.display = 'block';
+            hasilContent.innerHTML = '<div class="spinner-bar"><div class="spinner"></div></div>';
+
+            try {
+                const systemInstruction = `Anda adalah seorang analis data pendidikan yang ahli. Tugas Anda adalah menganalisis data nilai siswa yang diberikan dalam format CSV atau teks biasa. Berikan analisis yang jelas, ringkas, dan mudah dipahami oleh seorang guru. Format output Anda HARUS berupa HTML bersih. Gunakan tag <h4> untuk judul, <p> untuk paragraf, <ul> dan <li> untuk daftar, dan <strong> untuk penekanan. JANGAN gunakan tag <html>, <head>, atau <body>.`;
+                
+                const userPrompt = `
+Analisis data nilai berikut:
+\`\`\`
+${dataNilai}
+\`\`\`
+
+Tugas Analisis: "${jenisAnalisis || 'Lakukan analisis statistik dasar (rata-rata, nilai tertinggi, nilai terendah) dan identifikasi siswa yang mungkin memerlukan perhatian lebih.'}"
+
+Sajikan hasilnya dalam format HTML yang rapi.`;
+
+                const hasilAnalisis = await callGeminiAPI(userPrompt, systemInstruction);
+
+                hasilContent.innerHTML = hasilAnalisis;
+                showNotification('Analisis berhasil diselesaikan.');
+
+            } catch (error) {
+                console.error("Error saat analisis hasil:", error);
+                hasilContent.innerHTML = `<p style="color: var(--danger);">Terjadi kesalahan saat menganalisis data. Silakan coba lagi. Error: ${error.message}</p>`;
+                showNotification('Gagal menganalisis data.', true);
+            } finally {
+                // Kembalikan tombol ke state semula
+                analisisBtn.disabled = false;
+                analisisBtn.innerHTML = '<i class="fas fa-chart-pie"></i> Analisis Data';
+            }
+        });
+    }
+
+
     // --- Logika Form Modul Ajar ---
     const formModulAjar = document.getElementById('form-modul-ajar');
     const loadingSpinner = document.getElementById('loading-spinner');
