@@ -1965,4 +1965,3 @@ Parse naskah di atas menjadi array JSON dengan format:
     }
 
 });
-
