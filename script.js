@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- (BARU) KONFIGURASI API ---
+    // Ganti dengan kunci API Anda yang sebenarnya.
+    // PENTING: Untuk produksi, jangan letakkan kunci API langsung di kode frontend.
+    // Gunakan backend proxy untuk keamanan.
+    const GEMINI_API_KEY = "MASUKKAN_KUNCI_API_ANDA_DI_SINI";
+    // --- AKHIR KONFIGURASI API ---
+
     const sidebar = document.querySelector('.sidebar');
     const toggleSidebar = document.querySelector('.toggle-sidebar');
     const toggleDarkMode = document.querySelector('.toggle-dark-mode');
@@ -130,8 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Memanggil Gemini API untuk generasi teks (atau JSON).
      */
     async function callGeminiAPI(userPrompt, systemInstruction, jsonSchema = null) {
-        const apiKey = ""; // Dibiarkan kosong, akan di-handle oleh environment
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
         const payload = {
             contents: [{ parts: [{ text: userPrompt }] }],
@@ -174,8 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Memanggil Gemini API untuk pemahaman gambar (Vision).
      */
     async function callGeminiVisionAPI(userPrompt, systemInstruction, base64ImageData, jsonSchema = null) {
-        const apiKey = ""; // Dibiarkan kosong
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
         
         const payload = {
             contents: [{
@@ -223,8 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Memanggil Imagen API untuk generasi gambar.
      */
     async function callImagenAPI(prompt) {
-        const apiKey = ""; // Dibiarkan kosong
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${GEMINI_API_KEY}`;
         
         const payload = {
             instances: [{ prompt: prompt }],
@@ -254,8 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Mengembalikan data audio base64 (raw PCM).
      */
     async function callGeminiTTS_API(text, voiceName = 'Kore') {
-        const apiKey = ""; // Dibiarkan kosong
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${GEMINI_API_KEY}`;
 
         const payload = {
             contents: [{ parts: [{ text: text }] }],
