@@ -431,6 +431,177 @@ Sajikan hasilnya dalam format HTML yang rapi.`;
     }
 
 
+    // --- (BARU) Logika Form Generator Rubrik ---
+    const formRubrikPenilaian = document.getElementById('form-rubrik-penilaian');
+    if (formRubrikPenilaian) {
+        formRubrikPenilaian.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const deskripsiTugas = document.getElementById('rubrik-deskripsi-tugas').value;
+            const kriteria = document.getElementById('rubrik-kriteria').value;
+            const level = document.getElementById('rubrik-level').value;
+            const rubrikBtn = document.getElementById('rubrik-btn');
+            const hasilOutput = document.getElementById('rubrik-hasil-output');
+            const hasilContent = document.getElementById('rubrik-hasil-content');
+
+            if (!deskripsiTugas.trim() || !kriteria.trim()) {
+                showNotification('Deskripsi tugas dan kriteria tidak boleh kosong.', true);
+                return;
+            }
+
+            // Tampilkan loading
+            rubrikBtn.disabled = true;
+            rubrikBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membuat...';
+            hasilOutput.style.display = 'block';
+            hasilContent.innerHTML = '<div class="spinner-bar"><div class="spinner"></div></div>';
+
+            try {
+                const systemInstruction = `Anda adalah seorang ahli evaluasi pendidikan. Tugas Anda adalah membuat rubrik penilaian dalam format tabel HTML yang rapi dan jelas. Gunakan tag <table>, <thead>, <tbody>, <tr>, <th>, dan <td>. Berikan header kolom yang jelas seperti 'Kriteria', 'Skor 1 (Kurang)', 'Skor 2 (Cukup)', dst. Format output Anda HARUS berupa HTML bersih. JANGAN gunakan tag <html>, <head>, atau <body>.`;
+                
+                const userPrompt = `
+Buatkan rubrik penilaian untuk tugas berikut:
+- Deskripsi Tugas: "${deskripsiTugas}"
+- Kriteria Penilaian: "${kriteria}"
+- Jumlah Level Penilaian: ${level} (misal: 1 = Kurang, ${level} = Sangat Baik)
+
+Sajikan hasilnya dalam format tabel HTML (\`<table>\`) yang siap pakai.`;
+
+                const hasilRubrik = await callGeminiAPI(userPrompt, systemInstruction);
+
+                hasilContent.innerHTML = hasilRubrik;
+                showNotification('Rubrik penilaian berhasil dibuat.');
+
+            } catch (error) {
+                console.error("Error saat membuat rubrik:", error);
+                hasilContent.innerHTML = `<p style="color: var(--danger);">Terjadi kesalahan saat membuat rubrik. Silakan coba lagi. Error: ${error.message}</p>`;
+                showNotification('Gagal membuat rubrik.', true);
+            } finally {
+                // Kembalikan tombol ke state semula
+                rubrikBtn.disabled = false;
+                rubrikBtn.innerHTML = '<i class="fas fa-marker"></i> Buat Rubrik';
+            }
+        });
+    }
+
+
+    // --- (BARU) Logika Form Rekomendasi Materi ---
+    const formRekomendasiMateri = document.getElementById('form-rekomendasi-materi');
+    if (formRekomendasiMateri) {
+        formRekomendasiMateri.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const deskripsiSiswa = document.getElementById('rekomendasi-deskripsi-siswa').value;
+            const mapel = document.getElementById('rekomendasi-mapel').value;
+            const jenis = document.getElementById('rekomendasi-jenis').value;
+            const rekomendasiBtn = document.getElementById('rekomendasi-btn');
+            const hasilOutput = document.getElementById('rekomendasi-hasil-output');
+            const hasilContent = document.getElementById('rekomendasi-hasil-content');
+
+            if (!deskripsiSiswa.trim() || !mapel.trim()) {
+                showNotification('Deskripsi siswa dan mata pelajaran tidak boleh kosong.', true);
+                return;
+            }
+
+            // Tampilkan loading
+            rekomendasiBtn.disabled = true;
+            rekomendasiBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memberi Rekomendasi...';
+            hasilOutput.style.display = 'block';
+            hasilContent.innerHTML = '<div class="spinner-bar"><div class="spinner"></div></div>';
+
+            try {
+                const systemInstruction = `Anda adalah seorang ahli pedagogi dan konsultan pembelajaran personal. Tugas Anda adalah membuat rencana pembelajaran ${jenis} yang konkret dan bisa langsung diterapkan oleh guru. Format output Anda HARUS berupa HTML bersih. Gunakan <h4> untuk judul, <p> untuk paragraf, dan <ul>/<li> untuk daftar. JANGAN gunakan tag <html>, <head>, atau <body>.`;
+                
+                const userPrompt = `
+Buatkan rencana pembelajaran personal (${jenis}) untuk siswa dengan kondisi berikut:
+- Deskripsi Siswa: "${deskripsiSiswa}"
+- Mata Pelajaran/Topik: "${mapel}"
+
+Rencana harus mencakup:
+1.  **Analisis Kebutuhan Singkat:** Jelaskan secara singkat akar masalah (untuk remedial) atau potensi pengembangan (untuk pengayaan).
+2.  **Tujuan Pembelajaran Personal:** Apa yang harus dicapai siswa setelah program ini?
+3.  **Rekomendasi Aktivitas:** Berikan 3-5 ide aktivitas belajar yang spesifik dan menarik.
+4.  **Saran Materi Tambahan:** Sebutkan sumber belajar lain (misal: video YouTube, artikel, simulasi online).
+5.  **Cara Evaluasi:** Bagaimana guru bisa mengukur keberhasilan program ini?
+
+Sajikan hasilnya dalam format HTML yang rapi.`;
+
+                const hasilRekomendasi = await callGeminiAPI(userPrompt, systemInstruction);
+
+                hasilContent.innerHTML = hasilRekomendasi;
+                showNotification('Rekomendasi berhasil dibuat.');
+
+            } catch (error) {
+                console.error("Error saat membuat rekomendasi:", error);
+                hasilContent.innerHTML = `<p style="color: var(--danger);">Terjadi kesalahan saat membuat rekomendasi. Silakan coba lagi. Error: ${error.message}</p>`;
+                showNotification('Gagal membuat rekomendasi.', true);
+            } finally {
+                // Kembalikan tombol ke state semula
+                rekomendasiBtn.disabled = false;
+                rekomendasiBtn.innerHTML = '<i class="fas fa-user-graduate"></i> Beri Rekomendasi';
+            }
+        });
+    }
+
+
+    // --- (BARU) Logika Form Ice Breaker & Aktivitas Kelas ---
+    const formIceBreaker = document.getElementById('form-ice-breaker');
+    if (formIceBreaker) {
+        formIceBreaker.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const mapel = document.getElementById('ice-breaker-mapel').value;
+            const durasi = document.getElementById('ice-breaker-durasi').value;
+            const jenis = document.getElementById('ice-breaker-jenis').value;
+            const iceBreakerBtn = document.getElementById('ice-breaker-btn');
+            const hasilOutput = document.getElementById('ice-breaker-hasil-output');
+            const hasilContent = document.getElementById('ice-breaker-hasil-content');
+
+            if (!mapel.trim()) {
+                showNotification('Topik pelajaran tidak boleh kosong.', true);
+                return;
+            }
+
+            // Tampilkan loading
+            iceBreakerBtn.disabled = true;
+            iceBreakerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari Ide...';
+            hasilOutput.style.display = 'block';
+            hasilContent.innerHTML = '<div class="spinner-bar"><div class="spinner"></div></div>';
+
+            try {
+                const systemInstruction = `Anda adalah seorang guru yang kreatif dan berpengalaman. Tugas Anda adalah memberikan ide-ide aktivitas kelas yang menarik dan relevan. Format output Anda HARUS berupa HTML bersih. Gunakan <h4> untuk judul ide, <p> untuk deskripsi, dan <ul>/<li> untuk langkah-langkah atau bahan. JANGAN gunakan tag <html>, <head>, atau <body>.`;
+                
+                const userPrompt = `
+Berikan saya 2-3 ide untuk aktivitas kelas dengan parameter berikut:
+- Jenis Aktivitas: "${jenis}"
+- Topik Pelajaran: "${mapel}"
+- Perkiraan Durasi: ${durasi} menit
+
+Setiap ide harus mencakup:
+1.  **Nama Aktivitas:**
+2.  **Tujuan Singkat:**
+3.  **Langkah-langkah Pelaksanaan:**
+4.  **Bahan/Alat yang Diperlukan (jika ada):**
+
+Sajikan hasilnya dalam format HTML yang rapi dan mudah dibaca.`;
+
+                const hasilIde = await callGeminiAPI(userPrompt, systemInstruction);
+
+                hasilContent.innerHTML = hasilIde;
+                showNotification('Ide aktivitas berhasil dibuat.');
+
+            } catch (error) {
+                console.error("Error saat membuat ide aktivitas:", error);
+                hasilContent.innerHTML = `<p style="color: var(--danger);">Terjadi kesalahan saat mencari ide. Silakan coba lagi. Error: ${error.message}</p>`;
+                showNotification('Gagal mencari ide.', true);
+            } finally {
+                // Kembalikan tombol ke state semula
+                iceBreakerBtn.disabled = false;
+                iceBreakerBtn.innerHTML = '<i class="fas fa-puzzle-piece"></i> Cari Ide';
+            }
+        });
+    }
+
+
     // --- Logika Form Modul Ajar ---
     const formModulAjar = document.getElementById('form-modul-ajar');
     const loadingSpinner = document.getElementById('loading-spinner');
@@ -1432,7 +1603,6 @@ Tugas:
             }
         });
     }
-    // --- AKHIR LOGIKA KOREKSI SOAL ---
 
 
     // --- (BARU) LOGIKA UNTUK MEDIA AJAR ---
@@ -1477,7 +1647,7 @@ Tugas:
             const instruksi = document.getElementById('instruksi-tambahan-media').value;
             const buatGambar = document.getElementById('toggle-buat-gambar').checked;
             const buatAudio = document.getElementById('toggle-split-audio').checked;
-
+            
             if (!buatGambar && !buatAudio) {
                 showNotification('Gagal: Harap pilih setidaknya satu output (gambar atau audio).', true);
                 return;
