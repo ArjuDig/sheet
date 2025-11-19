@@ -1,4 +1,5 @@
 
+
 :root {
 	--primary: #7c5cff;
 	--primary-light: #a78bff;
@@ -1356,7 +1357,7 @@ hr.form-separator {
 }
 /* --- AKHIR CSS BARU --- */
 
-/* --- BARU: CSS untuk Media Ajar (Scene Editor) --- */
+/* --- BARU: CSS untuk Media Ajar --- */
 .naskah-preview-area {
 	background-color: var(--dark);
 	border-radius: var(--border-radius);
@@ -1373,132 +1374,53 @@ hr.form-separator {
 }
 .image-output-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-	gap: 24px;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
 }
-
-/* Editor Card Styles */
 .image-output-item {
 	border-radius: var(--border-radius);
 	overflow: hidden;
 	background-color: var(--dark);
 	box-shadow: var(--shadow);
 	transition: var(--transition);
-	border: 1px solid var(--glass-border);
-	display: flex;
-	flex-direction: column;
 }
 .dark-mode .image-output-item {
 	background-color: var(--dark-light);
 }
 .image-output-item:hover {
 	transform: translateY(-5px);
-	box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
-
-.image-output-item-content {
-	padding: 20px;
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-}
-
-.image-output-item-content h5 {
-	font-weight: 700;
-	margin-bottom: 4px;
-	font-size: 16px;
-	color: var(--primary);
-}
-
-.input-label-sm {
-	font-size: 12px;
-	font-weight: 600;
-	color: var(--text-secondary);
-	margin-bottom: 4px;
-	display: block;
-}
-
-.editor-textarea {
+.image-output-item img {
 	width: 100%;
-	padding: 10px;
-	border-radius: 8px;
-	border: 1px solid var(--glass-border);
-	background: white;
-	font-size: 14px;
-	min-height: 60px;
-	resize: vertical;
-	margin-bottom: 8px;
-	color: var(--text-primary);
+	height: 180px; /* Ukuran tetap */
+	object-fit: cover; /* Biar gambar pas */
+	display: block;
+	background-color: #eee; /* Latar belakang saat gambar di-load */
 }
-.dark-mode .editor-textarea {
-	background: rgba(0,0,0,0.2);
-	border-color: rgba(255,255,255,0.1);
-	color: #f0f0f0;
+.image-output-item-content {
+	padding: 16px;
 }
-.editor-textarea:focus {
-	outline: none;
-	border-color: var(--primary);
-	box-shadow: 0 0 0 2px rgba(124,92,255,0.1);
+.image-output-item-content h5 {
+	font-weight: 600;
+	margin-bottom: 12px;
 }
-
-/* Preview Button */
-.btn-preview-audio {
-	background-color: rgba(6, 182, 212, 0.1);
-	color: var(--success);
-	border: 1px solid rgba(6, 182, 212, 0.3);
-	padding: 8px 12px;
-	border-radius: 8px;
-	font-size: 13px;
-	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	width: fit-content;
-	transition: all 0.2s;
-}
-.btn-preview-audio:hover {
-	background-color: rgba(6, 182, 212, 0.2);
-	transform: translateY(-1px);
-}
-.btn-preview-audio i { font-size: 12px; }
-
-/* Visual Area in Card */
-.visual-area {
+/* (BARU) Style untuk audio player */
+.image-output-item-content audio {
+	width: 100%;
 	margin-top: 12px;
-	background-color: rgba(0,0,0,0.05);
-	border-radius: 8px;
-	height: 160px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
+	height: 40px; /* Buat lebih ramping */
+}
+.image-output-item-content p {
+	font-size: 14px;
+	color: var(--text-secondary);
+	max-height: 60px;
 	overflow: hidden;
 }
-.visual-area img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+.image-output-item-actions {
+	display: flex;
+	gap: 10px;
+	margin-top: 16px;
 }
-.btn-gen-visual {
-	background: white;
-	color: var(--text-primary);
-	padding: 8px 16px;
-	border-radius: 20px;
-	font-size: 13px;
-	font-weight: 600;
-	border: none;
-	box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-	cursor: pointer;
-	z-index: 2;
-	transition: transform 0.2s;
-}
-.btn-gen-visual:hover { transform: scale(1.05); }
-.dark-mode .btn-gen-visual {
-	background: var(--dark);
-	color: white;
-}
-
 /* --- AKHIR CSS BARU --- */
 
 /* --- BARU: CSS UNTUK BANK SOAL --- */
@@ -1918,4 +1840,94 @@ html {
 }
 .modal-tab-content.active {
     display: block;
+}
+
+/* Media Ajar Scene Card Styles */
+.scene-duration-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: rgba(124, 92, 255, 0.08);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(124, 92, 255, 0.2);
+    transition: var(--transition);
+}
+
+.dark-mode .scene-duration-wrapper {
+    background-color: rgba(90, 125, 255, 0.15);
+    border-color: rgba(90, 125, 255, 0.3);
+}
+
+.scene-duration-wrapper:hover {
+    background-color: rgba(124, 92, 255, 0.15);
+    box-shadow: 0 2px 8px rgba(124, 92, 255, 0.15);
+}
+
+.scene-duration-wrapper i {
+    color: var(--primary);
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+.scene-duration-wrapper label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 8px;
+    margin-bottom: 0;
+    color: var(--text-primary);
+}
+
+.dark-mode .scene-duration-wrapper label {
+    color: #f0f0f0;
+}
+
+.editor-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #fff;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    transition: border 0.3s;
+}
+
+.dark-mode .editor-input {
+    background-color: var(--dark);
+    border-color: var(--gray);
+    color: #f0f0f0;
+}
+
+.editor-input:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.editor-input.prominent {
+    width: 60px;
+    padding: 6px 4px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--primary);
+    border: 2px solid rgba(124, 92, 255, 0.3);
+    border-radius: 8px;
+    margin-bottom: 0;
+    margin-right: 6px;
+    font-size: 15px;
+}
+
+.editor-input.prominent:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.2);
+}
+
+.duration-unit {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.dark-mode .duration-unit {
+    color: var(--gray-light);
 }
