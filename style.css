@@ -5,6 +5,7 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --ppt-color: #d04423;
             --bg-body: #f8fafc;
             --bg-card: #ffffff;
             --text-main: #1e293b;
@@ -42,7 +43,6 @@
             transition: 0.3s ease-in-out;
         }
 
-        /* Ensure good contrast for sidebar text in dark mode */
         [data-theme="dark"] .sidebar { background: var(--bg-card); }
         [data-theme="dark"] .sidebar .brand-text { color: var(--text-main); }
         [data-theme="dark"] .sidebar .menu-group-label { color: var(--text-muted); }
@@ -59,14 +59,15 @@
             font-size: 1.2rem; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
         }
         
-        .brand-text { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; }
+        .brand-text { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; white-space: nowrap; }
         
-        .sidebar-scroll { flex: 1; padding: 0 16px 20px 16px; overflow-y: auto; }
+        .sidebar-scroll { flex: 1; padding: 0 16px 20px 16px; overflow-y: auto; overflow-x: hidden; }
         
         .menu-group-label {
             font-size: 0.75rem; font-weight: 700; 
             color: var(--text-muted); text-transform: uppercase; 
             letter-spacing: 0.8px; margin: 20px 0 8px 12px;
+            white-space: nowrap;
         }
         
         .menu-item { 
@@ -74,6 +75,7 @@
             padding: 12px 16px; border-radius: var(--radius-sm); 
             color: var(--secondary); cursor: pointer; 
             transition: 0.2s; font-weight: 500; margin-bottom: 4px;
+            white-space: nowrap;
         }
         
         .menu-item:hover { background: var(--bg-body); color: var(--primary); }
@@ -144,6 +146,7 @@
             color: var(--text-main); font-size: 0.95rem; transition: 0.2s;
         }
         .form-control:focus { outline: none; border-color: var(--primary); background: var(--bg-card); box-shadow: 0 0 0 3px var(--primary-light); }
+        textarea.form-control { resize: vertical; }
 
         /* Buttons */
         .btn { 
@@ -156,7 +159,17 @@
         .btn-secondary { background: white; border: 1px solid var(--border); color: var(--text-main); }
         .btn-secondary:hover { background: var(--bg-body); }
         .btn-danger { background: #fee2e2; color: var(--danger); }
+        .btn-danger:hover { background: #fecaca; }
         .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-success:hover { background: #059669; }
+        .btn-ppt { background: var(--ppt-color); color: white; }
+        .btn-ppt:hover { background: #b33619; }
+        
+        /* Loading state */
+        .btn.loading { opacity: 0.7; cursor: not-allowed; }
+        .btn.loading i { animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* Custom Toggle Button Group */
         .btn-group-custom {
@@ -178,10 +191,11 @@
         .upload-box {
             border: 2px dashed var(--border); border-radius: var(--radius-md);
             padding: 30px 20px; text-align: center; background: var(--bg-body);
-            transition: 0.2s; cursor: pointer; position: relative;
+            transition: 0.2s; cursor: pointer; position: relative; margin-bottom: 20px;
         }
         .upload-box:hover, .upload-box.has-file { border-color: var(--primary); background: var(--primary-light); }
         .upload-icon { font-size: 2rem; color: var(--text-muted); margin-bottom: 10px; }
+        .upload-text h4 { font-size: 1rem; margin: 0; color: var(--text-main); }
         .file-badge { display: inline-block; background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-top: 10px; }
 
         /* Divider */
@@ -189,7 +203,7 @@
         .divider-or::before { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: var(--border); z-index: 1; }
         .divider-text { background: var(--bg-card); padding: 0 10px; position: relative; z-index: 2; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
 
-        /* --- CONFIGURATION TOGGLES (ENHANCED) --- */
+        /* --- CONFIGURATION TOGGLES --- */
         .config-section { margin-top: 25px; padding-top: 20px; border-top: 1px dashed var(--border); }
         .config-title { 
             font-size: 0.85rem; font-weight: 700; color: var(--text-muted); 
@@ -230,7 +244,42 @@
             font-family: 'Times New Roman', serif; line-height: 1.6; 
             margin-top: 20px; display: none; border-radius: 4px;
         }
+        /* Markdown Content Styling */
+        .doc-preview h1, .doc-preview h2, .doc-preview h3 { margin-top: 1.5em; margin-bottom: 0.5em; }
+        .doc-preview p { margin-bottom: 1em; }
+        .doc-preview ul, .doc-preview ol { margin-bottom: 1em; padding-left: 20px; }
+        .doc-preview table { width: 100%; border-collapse: collapse; margin-bottom: 1em; }
+        .doc-preview th, .doc-preview td { border: 1px solid #ccc; padding: 8px; }
+        .doc-preview code { background: #f1f5f9; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
+        
+        .doc-preview img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: block; margin: 20px auto; }
+
         .doc-header { text-align: center; border-bottom: 3px double black; padding-bottom: 10px; margin-bottom: 20px; }
+        /* Ensure output contents are visible in dark mode inside preview only */
+        [data-theme="dark"] .doc-preview { background: #e2e8f0; color: #000; }
+
+        /* Custom Tabs */
+        .tab-nav { display: flex; gap: 5px; margin-bottom: 0; border-bottom: 1px solid #ddd; padding:0 10px; overflow-x: auto;}
+        .tab-btn { 
+            padding: 10px 20px; background: #f1f5f9; border: 1px solid #ddd; 
+            border-bottom: none; cursor: pointer; border-radius: 8px 8px 0 0; 
+            font-weight: 600; color: #64748b; font-size: 0.9rem; white-space: nowrap;
+        }
+        .tab-btn:hover { background: #e2e8f0; }
+        .tab-btn.active { background: #fff; color: var(--primary); border-top: 3px solid var(--primary); margin-bottom: -1px; padding-bottom: 11px; border-bottom: 1px solid white; }
+        
+        .tab-pane { display: none; padding: 40px; border: 1px solid #ddd; border-top: none; background: #fff; border-radius: 0 0 4px 4px; }
+        .tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Sub Nav Tabs (Internal) */
+        .btn-tab-sub {
+            background: transparent; border: none; padding: 10px 20px;
+            font-weight: 600; color: var(--secondary); cursor: pointer;
+            border-bottom: 2px solid transparent; transition: 0.2s;
+        }
+        .btn-tab-sub:hover { color: var(--primary); }
+        .btn-tab-sub.active { color: var(--primary); border-bottom-color: var(--primary); }
 
         /* Mobile Nav */
         .mobile-nav {
@@ -245,125 +294,77 @@
         
         /* Additional Utils */
         .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* Sidebar Collapsed Logic */
+        .sidebar.collapsed { width: 80px; }
+        .sidebar.collapsed .brand-text, 
+        .sidebar.collapsed .menu-group-label { display: none; } 
+        
+        .sidebar.collapsed .menu-item span { display: none; } /* Fix: Hide text properly */
+        
+        .sidebar.collapsed .menu-item { justify-content: center; padding: 12px; }
+        .sidebar.collapsed .menu-item i { margin: 0; font-size: 1.4rem; }
+        .sidebar.collapsed .logo-box { margin: 0 auto; }
+        
+        /* Main Content Adjust for collapsed */
+        .main-content.collapsed { margin-left: 80px; width: calc(100% - 80px); }
 
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
             .main-content { margin-left: 0; width: 100%; padding: 20px; padding-bottom: 90px; }
-            .toggle-sidebar { display: block; background: none; border: none; font-size: 1.5rem; color: var(--text-main); }
             .mobile-nav { display: flex; }
             .form-grid-3 { grid-template-columns: 1fr; }
-            .btn-group-custom { flex-wrap: wrap; }
-            .btn-group-custom .btn-toggle { flex-basis: 50%; border-top: 1px solid var(--border); }
-
-            /* On small screens always show menu labels (icon + text) even if sidebar has "collapsed" class.
-               This makes the icon-hover labels visible by default on mobile. */
-            .sidebar.collapsed { width: 220px; transform: translateX(0); }
-            .sidebar.collapsed .menu-item { justify-content: flex-start; padding: 12px 14px; font-size: 0.95rem; }
-            .sidebar.collapsed .menu-item i { margin-right: 10px; font-size: 1.1rem; }
-            .sidebar.collapsed .brand-text { display: inline-block; }
-            .sidebar.collapsed .menu-group-label { display:block; }
-
-                /* Show the floating tooltip element persistently on mobile so labels are available
-                    as a compact, tappable helper even when the UI might otherwise hide them. */
-                .sidebar-tooltip {
-                     opacity: 1 !important;
-                     transform: translateY(0) !important;
-                     pointer-events: auto !important;
-                     left: 12px !important;
-                     top: 72px !important;
-                     max-width: calc(100% - 24px) !important;
-                     box-shadow: 0 8px 26px rgba(2,6,23,0.18) !important;
-                     font-size: 0.95rem !important;
-                }
+            .sidebar.collapsed { transform: translateX(-100%); width: 260px; } 
+            .main-content.collapsed { margin-left: 0; width: 100%; }
+            .tab-nav { flex-wrap: nowrap; overflow-x: auto; }
+            .tab-btn { flex: 0 0 auto; font-size: 0.8rem; padding: 8px 15px; }
         }
-
-        /* Mobile: when sidebar is collapsed/closed, make main content full width */
-        .main-content.fullwidth { margin-left: 0 !important; width: 100% !important; }
-
-        /* Collapsed sidebar (desktop) */
-        .sidebar.collapsed { width: 80px; }
-        .sidebar.collapsed .sidebar-header { padding: 16px; }
-        .sidebar.collapsed .brand-text { display: none; }
-        .sidebar.collapsed .logo-box { width: 40px; height:40px; border-radius:10px; }
-        .sidebar.collapsed .menu-item { justify-content: center; padding: 12px 8px; font-size: 0; }
-        .sidebar.collapsed .menu-item i { font-size: 1.1rem; }
-        .sidebar.collapsed .menu-group-label { display:none; }
-        .sidebar.collapsed .sidebar-scroll { padding-left: 6px; padding-right:6px; }
-        .main-content.collapsed { margin-left: 80px; width: calc(100% - 80px); transition: margin-left .2s, width .2s; }
-
-        /* Tooltip for collapsed sidebar */
-        .sidebar-tooltip { position: fixed; z-index: 11000; background: var(--bg-card); color: var(--text-main); padding: 8px 10px; border-radius: 8px; box-shadow: 0 6px 20px rgba(2,6,23,0.2); font-size:0.9rem; border:1px solid var(--border); display:block; opacity:0; transform: translateX(-6px); transition: opacity .25s ease, transform .25s ease; pointer-events:none; white-space:nowrap; max-width: calc(100% - 32px); box-sizing: border-box; }
-
-        /* On mobile the tooltip is allowed — JS will position it above/below the item and clamp within the viewport */
 
         @media print {
-            .sidebar, .mobile-nav, .btn, .form-group, .upload-box, .welcome-banner, .stats-grid, .divider-or, .config-section, .card-header, .topbar { display: none !important; }
-            .main-content { margin: 0; padding: 0; }
-            .card { border: none; box-shadow: none; }
-            .doc-preview { display: block !important; border: none; box-shadow: none; padding: 0; }
-            body { background: white; }
+            /* HIDE EVERYTHING BY DEFAULT */
+            body * { visibility: hidden; }
+            
+            /* ONLY SHOW WHAT IS MARKED AS PRINT-AREA */
+            .print-area, .print-area * { 
+                visibility: visible; 
+            }
+            
+            .print-area { 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                background: white;
+                color: black;
+                z-index: 99999;
+                padding: 20px;
+            }
+
+            .output-actions, .tab-nav { display: none !important; }
         }
 
-        /* Specific styles for new dropdowns */
-        .select-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
+        /* Select */
+        .select-group { position: relative; margin-bottom: 20px; }
         .select-group select {
-            appearance: none;
-            padding: 12px 30px 12px 16px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            background: var(--bg-body);
-            color: var(--text-main);
-            font-size: 0.95rem;
-            width: 100%;
-            cursor: pointer;
+            appearance: none; padding: 12px 30px 12px 16px;
+            border-radius: var(--radius-sm); border: 1px solid var(--border);
+            background: var(--bg-body); color: var(--text-main);
+            font-size: 0.95rem; width: 100%; cursor: pointer;
         }
-        .select-group i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--secondary);
-            pointer-events: none;
-        }
+        .select-group i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--secondary); pointer-events: none; }
 
-        /* Toast notifications */
+        /* Toast */
         .toast-container { position: fixed; right: 20px; bottom: 20px; z-index: 10000; display:flex; flex-direction:column; gap:8px; }
-        .toast { background: rgba(0,0,0,0.85); color: #fff; padding: 10px 14px; border-radius: 8px; font-size:0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        [data-theme="dark"] .toast { background: rgba(255,255,255,0.08); color: var(--text-main); }
+        .toast { background: rgba(0,0,0,0.85); color: #fff; padding: 10px 14px; border-radius: 8px; font-size:0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Output action button colors */
-        .btn-view { background: var(--primary); color: white; border: none; }
-        .btn-view:hover { background: #4f46e5; }
-        .btn-download { background: var(--success); color: white; border: none; }
-        .btn-download:hover { background: #059669; }
-        .btn-print { background: #64748b; color: white; border: none; }
-        .btn-print:hover { background: #52606a; }
-
-        /* Modal (redesigned) */
-        #modal-output { --pad: 18px; display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 9999; align-items: center; justify-content: center; padding: 24px; }
+        /* Modal Output */
+        #modal-output { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 9999; align-items: center; justify-content: center; padding: 24px; }
         #modal-output.open { display:flex; }
-        .modal-dialog { background: var(--bg-card); color: var(--text-main); width: 100%; max-width: 920px; border-radius: 14px; box-shadow: 0 12px 40px rgba(2,6,23,0.4); overflow: hidden; transform: translateY(12px) scale(.995); opacity: 0; transition: opacity .28s ease, transform .28s cubic-bezier(.2,.9,.2,1); }
-        #modal-output.open .modal-dialog { transform: translateY(0) scale(1); opacity: 1; }
-        .modal-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: calc(var(--pad) - 4px); border-bottom: 1px solid var(--border); background: linear-gradient(90deg, rgba(99,102,241,0.06), rgba(168,85,247,0.03)); }
-        .modal-title { font-weight:700; font-size:1.05rem; color:var(--text-main); }
-        .modal-close { background: transparent; border: none; color: var(--text-muted); font-size:1rem; padding:8px; border-radius:8px; cursor:pointer; }
-        .modal-close:hover { background: var(--primary-light); color: var(--primary); }
-        .modal-body { padding: 18px; max-height: 60vh; overflow:auto; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-main); }
+        .modal-dialog { background: var(--bg-card); color: var(--text-main); width: 100%; max-width: 920px; border-radius: 14px; box-shadow: 0 12px 40px rgba(2,6,23,0.4); overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; }
+        .modal-header { display:flex; align-items:center; justify-content:space-between; padding: 16px; border-bottom: 1px solid var(--border); }
+        .modal-body { padding: 18px; overflow-y:auto; font-family: 'Plus Jakarta Sans', sans-serif; flex: 1; }
         .modal-footer { display:flex; gap:8px; justify-content:flex-end; padding: 14px 18px; border-top:1px solid var(--border); background: var(--bg-card); }
-        .modal-body h4 { margin-top:0; }
-        /* small scroll styling */
-        .modal-body::-webkit-scrollbar { width:10px; }
-        .modal-body::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(99,102,241,0.2), rgba(99,102,241,0.35)); border-radius:10px; }
-        @media (max-width:600px) {
-            .modal-dialog { max-width: 100%; border-radius: 12px; }
-            .modal-body { max-height: 70vh; }
-        }
-        /* Styles for the mobile tooltip static list */
-        .tooltip-menu-list { list-style: none; margin: 0; padding: 4px 0; }
-        .tooltip-menu-item { display:flex; align-items:center; gap:8px; padding: 8px 10px; border-radius: 8px; color: var(--text-main); }
-        .tooltip-menu-item + .tooltip-menu-item { margin-top: 6px; }
-        .tooltip-menu-item:hover { background: rgba(99,102,241,0.04); }
+        .generated-image { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
