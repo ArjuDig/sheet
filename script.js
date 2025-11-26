@@ -380,7 +380,9 @@ const apiKey = ""; // Disuntikkan saat runtime
         });
 
         // --- KOKURIKULER LOGIC (NEW) ---
-        document.getElementById('btn-gen-kokurikuler').addEventListener('click', async function() {
+        const btnKokurikuler = document.getElementById('btn-gen-kokurikuler');
+        if (btnKokurikuler) {
+            btnKokurikuler.addEventListener('click', async function() {
             const btn = this;
             const tema = document.getElementById('kokurikuler-tema').value;
             const topik = document.getElementById('kokurikuler-topik').value;
@@ -442,6 +444,7 @@ const apiKey = ""; // Disuntikkan saat runtime
             btn.innerHTML = '<i class="fas fa-magic"></i> Buat Program Kokurikuler';
             document.getElementById('res-kokurikuler').scrollIntoView({ behavior: 'smooth' });
         });
+        }
 
         // --- SOAL TABS LOGIC (Sub-Tabs for Buat Soal & Koreksi) ---
         function switchSoalSubTab(tabId) {
