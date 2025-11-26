@@ -1,4 +1,4 @@
-const apiKey = ""; // Disuntikkan saat runtime
+        const apiKey = ""; // Disuntikkan saat runtime
 
         // --- UTILS ---
         function showToast(message) {
@@ -163,7 +163,7 @@ const apiKey = ""; // Disuntikkan saat runtime
                 'pengaturan': 'Profil Guru',
                 'materi-ajar': 'Generator Modul Ajar',
                 'bahan-ajar': 'Generator Media Ajar', 
-                'kokurikuler': 'Projek Kokurikuler', 
+                'kokurikuler': 'Projek Kokurikuler (P5)', 
                 'soal': 'Asesmen & Evaluasi',
                 'media-ajar': 'Visual & Audio Generator', // Updated Title
                 'rubrik-penilaian': 'Rubrik Penilaian',
@@ -379,13 +379,11 @@ const apiKey = ""; // Disuntikkan saat runtime
             document.getElementById('res-bahan').scrollIntoView({ behavior: 'smooth' });
         });
 
-        // --- KOKURIKULER LOGIC (NEW) ---
-        const btnKokurikuler = document.getElementById('btn-gen-kokurikuler');
-        if (btnKokurikuler) {
-            btnKokurikuler.addEventListener('click', async function() {
+        // --- KOKURIKULER / P5 LOGIC (NEW) ---
+        document.getElementById('btn-gen-p5').addEventListener('click', async function() {
             const btn = this;
-            const tema = document.getElementById('kokurikuler-tema').value;
-            const topik = document.getElementById('kokurikuler-topik').value;
+            const tema = document.getElementById('p5-tema').value;
+            const topik = document.getElementById('p5-topik').value;
             
             if(!topik) return showToast("Topik Projek harus diisi!");
 
@@ -393,12 +391,12 @@ const apiKey = ""; // Disuntikkan saat runtime
             btn.innerHTML = '<i class="fas fa-spinner"></i> Merancang Projek...';
 
             const prompt = `
-            Buatkan Rancangan Projek Kokurikuler dengan detail berikut:
+            Buatkan Rancangan Projek Penguatan Profil Pelajar Pancasila (P5) dengan detail berikut:
             Tema: ${tema}
             Topik Spesifik: ${topik}
-            Fase: ${document.getElementById('kokurikuler-fase').value}
-            Durasi: ${document.getElementById('kokurikuler-durasi').value}
-            Metode: ${document.getElementById('kokurikuler-metode').value}
+            Fase: ${document.getElementById('p5-fase').value}
+            Durasi: ${document.getElementById('p5-durasi').value}
+            Metode: ${document.getElementById('p5-metode').value}
 
             OUTPUT HARUS DALAM FORMAT JSON yang Valid dengan keys berikut:
             {
@@ -421,30 +419,29 @@ const apiKey = ""; // Disuntikkan saat runtime
                         if(el) el.innerHTML = marked.parse(text || "Tidak ada konten generated.");
                     };
 
-                    setContent('kokurikuler-modul', data.modul);
-                    setContent('kokurikuler-alur', data.alur);
-                    setContent('kokurikuler-rubrik', data.rubrik);
-                    setContent('kokurikuler-refleksi', data.refleksi);
+                    setContent('p5-modul', data.modul);
+                    setContent('p5-alur', data.alur);
+                    setContent('p5-rubrik', data.rubrik);
+                    setContent('p5-refleksi', data.refleksi);
 
-                    document.getElementById('res-kokurikuler').style.display = 'block';
+                    document.getElementById('res-p5').style.display = 'block';
                     document.getElementById('stat-generated').innerText = parseInt(document.getElementById('stat-generated').innerText) + 1;
                 } else {
                     throw new Error("Parsed JSON is null");
                 }
             } catch (e) {
                 console.error(e);
-                showToast("Gagal memproses Kokurikuler. Coba lagi.");
+                showToast("Gagal memproses P5. Coba lagi.");
                 // Fallback text output if JSON fails
                 const textFallback = await callGemini(prompt + " (Jawab dalam teks biasa saja)");
-                document.getElementById('kokurikuler-modul').querySelector('.content-body').innerHTML = marked.parse(textFallback);
-                document.getElementById('res-kokurikuler').style.display = 'block';
+                document.getElementById('p5-modul').querySelector('.content-body').innerHTML = marked.parse(textFallback);
+                document.getElementById('res-p5').style.display = 'block';
             }
 
             btn.classList.remove('loading');
-            btn.innerHTML = '<i class="fas fa-magic"></i> Buat Program Kokurikuler';
-            document.getElementById('res-kokurikuler').scrollIntoView({ behavior: 'smooth' });
+            btn.innerHTML = '<i class="fas fa-magic"></i> Buat Program P5';
+            document.getElementById('res-p5').scrollIntoView({ behavior: 'smooth' });
         });
-        }
 
         // --- SOAL TABS LOGIC (Sub-Tabs for Buat Soal & Koreksi) ---
         function switchSoalSubTab(tabId) {
